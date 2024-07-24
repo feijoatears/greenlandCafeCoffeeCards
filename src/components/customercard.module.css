@@ -1,0 +1,56 @@
+@font-face {
+    font-family: "Source Sans";
+    src: url(
+       "../resources/fonts/SourceSans3-VariableFont.ttf"
+    );
+}
+#mainWrap
+{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 100px;
+    border-radius: 10px;
+    margin: 10px;
+    background: rgb(220,220,220);
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: none;
+    transition: all ease-in-out 250ms;
+    user-select: none;
+    cursor: pointer;
+}
+#mainWrap:hover
+{
+    scale: 1.05;
+    background-color: rgb(139, 23, 28);
+    box-shadow: 0px 0px 6px 2px rgb(136, 136, 136);
+}
+#mainWrap:hover #info,
+#mainWrap:hover #name
+{
+    color: white;
+}
+#name
+{
+    font-size: 30px;
+    font-family: "Source Sans";
+    font-weight: 600;
+    text-shadow: 0px 3px 20px  rgba(0, 0, 0, 0.432);
+    transition: all ease-in-out 250ms;
+}
+
+#info
+{
+    display: inline-flex;
+    width: 50%;
+        
+    justify-content: space-between;
+    font-weight: 400;
+    font-size: 18px;
+    text-shadow: 0 3px 4px rgba(53, 53, 53, 0.336);
+    color: rgba(48, 48, 48, 0.74);
+    font-family: "Source Sans";
+    transition: all ease-in-out 250ms;
+}

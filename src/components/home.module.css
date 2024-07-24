@@ -1,0 +1,251 @@
+@font-face 
+{
+    font-family: "Source Sans";
+    src: url("../resources/fonts/SourceSans3-VariableFont.ttf");
+}
+@font-face 
+{
+    font-family: "Inter";
+    src: url("../resources/fonts/Inter-VariableFont.ttf");
+}
+
+#home 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#noCustomers
+{ 
+    background-color: rgb(220,220,220);
+
+    width: 560px;
+    padding: 20px;
+    text-align: center;
+    font-family: "Inter";
+    font-size: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#topButtonWrap
+{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    margin: 20px 0 0 0;
+    gap: 10px;
+    transition: all ease 250ms;
+}
+#topButtonWrap > button
+{
+    min-height: 60px;
+    border-radius: 6px;
+    background-color: rgb(139, 23, 28);
+    color: white;
+    font-family: "Source Sans";
+    font-size: 26px;
+    font-weight: 300;
+    border: 0;
+    cursor: pointer;
+    width: 100%;
+    transition: all ease 250ms;
+}
+
+#filter
+{
+    display: flex;
+    justify-content: space-between;
+    height: 0px;
+    overflow: hidden;
+    gap: 10px;
+    transition: height ease 250ms, opacity ease 200ms;
+    opacity: 0;
+}
+#filter.active
+{
+    height: 40px;
+    transition: height cubic-bezier(.35,0.39,.55,1.5) 200ms, opacity ease 200ms;
+    opacity: 1;
+}
+#topButtonWrap > button:hover
+{
+    background-color: rgb(116, 26, 26);
+    scale: 1.025;
+}
+#topButtonWrap > button:active
+{
+    scale: 1;
+}
+#filter.active > button,
+#filter > button
+{
+    width: 33.3%;
+    height: 40px;
+    background-color: rgb(173, 62, 62);
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    white-space: nowrap;
+    font-family: "Source Sans";
+    font-size: 18px;
+    border: 0;
+    border-radius: 6px;
+    transition: scale ease-in-out 75ms, background-color ease-in-out 150ms;
+
+}
+#filter > button:hover
+{
+    background-color: rgb(153, 29, 29);
+}
+#filter > button:active
+{
+    background-color: brown;
+    scale: 0.95;
+}
+
+
+#customerList > a
+{
+    text-decoration: none;
+    color: unset;
+}
+
+#addCustomerModal
+{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: -100%;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    transition: opacity ease 300ms, width ease 0ms 350ms, height ease 0ms 350ms, left ease 0ms 350ms;
+}
+#addCustomerModal * 
+{
+    font-family: "Inter";
+}
+#addCustomerModal.active
+{
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: opacity ease 300ms;
+}
+
+#customerName
+{
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+#customerName > form 
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+#customerName > form > input
+{
+    padding: 10px;
+    margin: 0;
+    background-color: rgb(228, 228, 228);
+    border-radius: 3px;
+    border: 3px solid rgb(218, 218, 218);
+    text-align: center;
+    height: 40px;
+    font-size: 22px;
+    transition: all ease 250ms;
+}
+#customerName > form > input:focus-visible
+{
+    border: 3px solid gray;
+    outline: 0;
+    scale: 1.05;
+    box-shadow: 4px 4px 6px 2px gray;
+}
+#customerName > form > input::placeholder
+{
+    opacity: 1;
+    transition: opacity ease 250ms;
+}
+#customerName > form > input:focus-visible::placeholder
+{
+    opacity: 0;
+}
+#customerName > form > #customerNameButtonWrap
+{
+    display: flex;
+    justify-content: space-between;
+}
+#customerName > form > #customerNameButtonWrap > button
+{
+    width: 49%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    border: 3px solid rgb(230,230,230);
+    transition: background-color ease-in-out 250ms, scale ease 100ms;
+}
+#customerName > form > #customerNameButtonWrap > button:hover
+{
+    background-color: rgb(215, 215, 215);
+}
+#customerName > form > #customerNameButtonWrap > button:active
+{
+    scale: 0.95;
+}
+
+#optionWrap > div
+{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+}
+#optionWrap > div > label
+{
+    font-size: 18px;
+    font-weight: 500;
+    border-bottom: 2px solid rgb(139, 23, 28);
+    padding: 5px;
+}
+
+input[type=range] 
+{
+    margin: 15px;
+  appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb 
+{
+  appearance: none;
+  background: white;
+  height: 16px;
+  width: 15px;
+  border-radius: 20px;
+  margin-top: 0px;
+
+}
+
+input[type=range]::-webkit-slider-runnable-track 
+{
+    width: 300px;
+    height: 20px;
+    background: rgb(139, 23, 28);
+    padding: 2px;
+    margin: 0;
+    border-radius: 10px;
+    
+}
+

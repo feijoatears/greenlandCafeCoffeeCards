@@ -1,0 +1,355 @@
+@font-face 
+{
+    font-family: "Source Sans";
+    src: url("../resources/fonts/SourceSans3-VariableFont.ttf");
+}
+@font-face 
+{
+    font-family: "Inter";
+    src: url("../resources/fonts/Inter-VariableFont.ttf");
+}
+
+#outerWrapper
+{
+    display: flex;
+    flex-direction: column;
+    margin: 25px auto 35px auto;
+
+    width: 80vw;
+    min-width: 550px;
+
+    height: 75vh;
+    min-height: 550px;
+}
+#backButton
+{
+
+    background-color: rgb(139, 23, 28);
+    border: 3px solid rgb(175, 25, 25);
+    color: white;
+
+    width: 120px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: "Inter";
+    font-size: 18px;
+    transition: background-color ease-in-out 250ms, 
+                color ease-in-out 150ms, 
+                scale ease 150ms,
+                border-color ease 250ms;
+}
+
+#backButton:hover
+{
+    background-color:rgb(221, 221, 221);
+    border-color: rgb(230,230,230);
+    color: black;
+}
+#backButton:active
+{
+    scale: 0.95;
+}
+
+#customer
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; 
+    
+    width: 100%;
+    
+    margin-top: 25px;
+
+    border-radius: 20px;
+    background-color: rgb(230, 230, 230);
+
+    font-family: "Source Sans";
+    user-select: none;
+}
+
+#customer > h1
+{
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 10px 0;
+
+    background-color: rgb(139, 23, 28);    
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    text-decoration: underline;
+    color: white; 
+      
+    white-space: nowrap;
+    font-weight: 200;
+    font-size: 36px;
+    text-align: center;
+}
+
+
+
+#mainWrap
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;    
+    width: 100%;
+    
+}
+#infoWrap
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+#stampHolder
+{
+    display: flex;
+    justify-content: space-evenly;
+    width: 500px;
+    margin-top: 20px;
+    transition: all ease-in-out 250ms;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+}
+#stampHolder:hover
+{
+ scale: 1.05;
+}
+
+#stampHolder > div
+{
+    height: 40px;
+    width: 40px;
+    border: 3px solid rgba(187, 187, 187, 0.315);
+    background-color: rgb(235, 235, 235);
+    border-radius: 4px;
+    transition: background-color ease-in 125ms;
+    text-align: center;
+    font-size: 30px;
+    font-family: "Inter";
+    transition: all ease 250ms, blur linear 0ms;
+}
+
+#stampHolder > div.stamped
+{
+    filter:blur(0.4px);
+    scale: 1.25;
+    border-radius: 25px;
+    transition: all ease 250ms, border-radius linear 0ms;
+    background-color: rgb(139, 23, 28);
+    
+    border-color: rgb(163, 25, 25);
+    line-height: 1.35;
+    
+    color: white;
+}
+#stampHolder > div.stamped::before
+{
+    content: "☕︎";
+    color: white;
+    
+}
+
+#infoWrap > div
+{
+    display: flex;
+    flex-direction: column;
+    
+    padding: 25px;    
+    font-size: 22px;
+    border-radius: 10px;
+    height: 100px;
+    transition: all ease-out 250ms;
+}
+#infoWrap > div > h4, p
+{
+    margin: 0;
+    text-align: center;
+    padding: 5px;
+}
+#infoWrap > div > h4
+{
+    font-weight: 600;
+    font-size: 26px;
+    text-shadow: 0px 2px 0px rgb(196, 196, 196);
+}
+
+#buttonWrap
+{
+    display: flex;
+    justify-content: center; 
+    gap: 125px;
+    width: 100%;
+    
+}
+
+#buttonWrap > button
+{
+    font-family: "Inter";
+    font-size: 18px;
+    padding: 10px;
+
+    border: 2px solid rgb(150, 150, 150);
+
+    color: white;
+    background-color: rgb(139, 23, 28);
+    font-weight: 300;
+    border-radius: 7.5px;
+    transition: background-color ease-in-out 100ms, scale cubic-bezier(1, 3, 0.5, 0.75) 125ms, box-shadow ease-in-out 100ms;
+}
+#buttonWrap > button:active
+{
+    background-color:rgb(117, 13, 13);
+
+    scale: 0.975;
+}
+#date > div, #visits
+{
+    font-weight: 500;
+}
+#date
+{
+    display: flex;
+    font-family: "Inter";
+    justify-content: center;
+    gap: 75px;
+    margin-top: 40px;
+    font-weight: 400;
+}
+#visits
+{
+    display: flex;
+    margin-top: 20px;
+    font-family: "Inter";
+    justify-content: center;
+}
+#deleteButton
+{
+    font-family: "Inter";
+    font-size: 22px;
+    font-weight: 200;
+    padding: 20px;
+    line-height: 0;
+    height: 60px;
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-top: 30px;
+    background-color: rgb(139, 23, 28);
+    color: white;
+}
+#modal
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 0px;
+    width: 0px;
+    
+    background-color: rgba(0,0,0,0.5);
+    padding: 10px;
+    opacity: 0;
+    visibility: visible;
+    white-space: nowrap;
+    transition: opacity 350ms ease-in-out, width ease 0ms 350ms, height ease 0ms 350ms, left 0ms 350ms;
+}
+#modal.active 
+{
+    height: 100vh;
+    width: 100vw;
+    left: 0;
+    visibility: visible;
+    opacity: 1;
+
+    transition: opacity 350ms ease-in-out;
+
+}
+#modal > main 
+{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    flex-direction: column;
+    gap: 50px;
+    transition: all ease 250ms;
+}
+#modal > main > form
+{
+    display: flex;
+    flex-direction: column;
+}
+
+#modal #modalButtonWrap
+{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+#modalButtonWrap > button
+{
+    width: 33%;
+    height: 35px;
+
+    border-radius: 5px;
+    border: 1px solid rgb(202, 202, 202);
+    font-family: "Source Sans";
+    font-size: 18px;
+
+    transition: all ease 250ms;
+}
+
+#modalButtonWrap > button:hover
+{
+    background-color: rgb(139, 23, 28);
+    color: white;
+}
+    
+
+#modal > main > div > p
+{
+    text-align: center;
+    font-size: 18px;
+}
+#modal > main > div > p, h2
+{
+    padding: 10px;
+    margin: 0;
+}
+#modal > main > form > input
+{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: 22px;
+    font-family: "Inter";
+    border-radius: 5px;
+    margin: 10px 0 25px 0;
+    outline: 3px solid rgb(230, 230, 230);
+    border: 0;
+    transition: all ease-in-out 250ms;
+}
+
+#modal > main > form > input:focus-visible
+{
+    outline: 3px solid gray;
+    transition: all ease 250ms;
+}
+#modal > main > form > input::placeholder
+{
+    opacity: 1;
+    transition: opacity ease 250ms;
+}
+#modal > main > form > input:focus-visible::placeholder
+{
+    opacity: 0;
+}
+
