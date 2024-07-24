@@ -1,5 +1,5 @@
 <h1>Outline</h1>
-<p>A very basic coffee card app, made for the purpose of:/p>
+<p>A very basic coffee card app, made for the purpose of:</p>
 <ul>
   <li>Replacing physical paper cards</li>
   <li>Saving time when looking for a particular customer</li>
