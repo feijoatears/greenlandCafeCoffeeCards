@@ -21,4 +21,5 @@
   <li>If you created an exe, the output directory will be under 'out'. You can run the application from here.</li>
 </ol>
 <br>
-<p>PS: I added a snake game that's playable by using the command 'Ctrl+Alt+S'.<br>This doesn't affect the functionality of the application, it's just an easter egg :)</p>
+<p>PS: There are some structure issues present in this version, which I hope to address later</p>
+<p>PPS: I added a snake game that's playable by using the command 'Ctrl+Alt+S'.<br>This doesn't affect the functionality of the application, it's just an easter egg :)</p>
