@@ -300,7 +300,6 @@ export default function Customer()
                                 <div id={styles.buttonWrap}>
                                     <button onClick={() => {if(!addingStamp) addStamp(info.stamps)}}>Add Stamp</button>
                                     <button onClick={redeemCoffee}>Redeem Coffee</button>
-                                    
                                 </div>
                                 <div id={styles.date}>
                                     <div>
@@ -367,7 +366,7 @@ export default function Customer()
                             <form onSubmit={editCustomer}>
                                 <div>
                                     <label>Change Name</label>
-                                    <input name="name" type="text" placeholder="Customer Name" value={editName} onChange={e => setEditName(e.target.value)}/>
+                                    <input name="name" type="text" maxLength={50} placeholder="Customer Name" value={editName} onChange={e => setEditName(e.target.value)}/>
                                 </div>
                                 <div>
                                     <label>Change Stamps</label>

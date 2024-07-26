@@ -71,6 +71,7 @@ header > div > a:hover
 #searchWrap > button
 {
     user-select: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     padding: 10px;
