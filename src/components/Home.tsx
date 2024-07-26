@@ -5,6 +5,7 @@ import CustomerCard from './CustomerCard';
 
 interface Customer
 {
+    id: number;
     name: string;
     stamps: number;
     freeNum: number;
@@ -201,8 +202,9 @@ const Home: React.FC<Query> = ({query}) =>
                     (
                         customers.map((customer, key) => 
                         (
-                            <Link key={key} to={`customer/${customer.name}`}>
+                            <Link key={key} to={`customer/${customer.id}`}>
                                 <CustomerCard 
+                                    id={customer.id}
                                     name={customer.name} 
                                     stamps={customer.stamps}
                                     freeNum={customer.freeNum}

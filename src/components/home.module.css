@@ -213,7 +213,7 @@
     font-size: 18px;
     margin: 20px;
 }
-#optionWrap > div > label
+#optionWrap > div > label:first-child
 {
     font-size: 18px;
     font-weight: 500;
@@ -224,7 +224,7 @@
 input[type=range] 
 {
     margin: 15px;
-  appearance: none;
+    appearance: none;
 }
 
 input[type=range]::-webkit-slider-thumb 

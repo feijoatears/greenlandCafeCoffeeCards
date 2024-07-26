@@ -31,11 +31,11 @@ contextBridge.exposeInMainWorld("electron",
         }
     },
 
-    getCustomer: async (name: string) =>
+    getCustomer: async (id: number) =>
     {
         try
         {
-            return await ipcRenderer.invoke("get-customer", name);
+            return await ipcRenderer.invoke("get-customer", id);
         }
         catch(e)
         {
@@ -43,19 +43,37 @@ contextBridge.exposeInMainWorld("electron",
         }
     },
 
-    addStamp: async (name: string) =>
+    addStamp: async (id: number) =>
     {
-        return await ipcRenderer.invoke("add-stamp", name);    
+        return await ipcRenderer.invoke("add-stamp", id);
     },
+    
     addCustomer: async (name:string, stamps:number, freeNum:number) =>
     {
         return await ipcRenderer.invoke("add-customer", name, stamps, freeNum)
     },
-    redeemCoffee: async (name: string) =>
+
+    editCustomer: async (id: number, newName: string, stamps: number, freeNum: number) =>
+    {
+        return await ipcRenderer.invoke("edit-customer", id, newName, stamps, freeNum);
+    },
+
+    removeCustomer: async (id: number) =>
     {
         try 
         {
-            return await ipcRenderer.invoke("redeem-coffee", name);    
+            return await ipcRenderer.invoke("remove-customer", id);
+        } 
+        catch (e) 
+        {
+            throw new Error(e);    
+        }
+    },
+    redeemCoffee: async (id: number) =>
+    {
+        try 
+        {
+            return await ipcRenderer.invoke("redeem-coffee", id);    
         } 
         catch (e) 
         {
@@ -63,15 +81,4 @@ contextBridge.exposeInMainWorld("electron",
         }
     },
 
-    removeCustomer: async (name:string) =>
-    {
-        try 
-        {
-            return await ipcRenderer.invoke("remove-customer", name);    
-        } 
-        catch (e) 
-        {
-            throw new Error(e);    
-        }
-    }
 })

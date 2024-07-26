@@ -130,7 +130,7 @@ return new Promise((res, rej) =>
     })
 })
 })
-ipcMain.handle("add-customer", async (e, name:string, stamps:number, freeNum:number) => 
+ipcMain.handle("add-customer", async (e, name:string, stamps: number, freeNum:number) => 
 {
     const dateAdded: string = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
                                 .toISOString()
@@ -140,22 +140,22 @@ ipcMain.handle("add-customer", async (e, name:string, stamps:number, freeNum:num
                                 .join("/"); 
     //account for timezone, then return in dd/mm/yyyy format
 
-    return new Promise((res, rej) => 
+    return new Promise((res) => 
     {
-        db.run(`INSERT INTO customers VALUES ("${name}", ${stamps}, ${freeNum}, "${dateAdded}", "${dateAdded}")`, (err) =>
-        {
-            if(err)
+        db.run(`INSERT INTO customers (name, stamps, freeNum, dateAdded, lastVisit) VALUES (?, ?, ?, ?, ?)`,
+            [name, stamps, freeNum, dateAdded, dateAdded], 
+            (err) =>
             {
-                if((err as SQLiteError).errno === 19)
+                if(err)
                 {
-                    createAlert(new Error(`Couldn't add customer to database: '${name}' already exists`))
+                    createAlert(new Error(`Couldn't add customer to database: ${err}`))
+                }
+                else
+                {
+                    res({success: true});
                 }
             }
-            else
-            {
-                res({success: true});
-            }
-        })
+        )
     })
 });
 ipcMain.handle("search-customers", async (e, name: string) =>
@@ -175,11 +175,11 @@ ipcMain.handle("search-customers", async (e, name: string) =>
         })
     })
 })
-ipcMain.handle("get-customer", async (e, name:string) =>
+ipcMain.handle("get-customer", async (e, id: number) =>
 {
     return new Promise((res, rej) =>
     {
-        db.get(`SELECT * FROM customers WHERE name = "${name}"`, (err, row) =>
+        db.get(`SELECT * FROM customers WHERE id = ${id}`, (err, row) =>
         {
             if(err)
             {
@@ -192,7 +192,7 @@ ipcMain.handle("get-customer", async (e, name:string) =>
         })
     })
 })
-ipcMain.handle("add-stamp", async (e, name:string) =>
+ipcMain.handle("add-stamp", async (e, id: number) =>
 {
     const date: string = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
                             .toISOString()
@@ -205,8 +205,8 @@ ipcMain.handle("add-stamp", async (e, name:string) =>
         db.run(`UPDATE customers SET 
                 stamps = CASE WHEN stamps + 1 > 6 THEN 0 ELSE stamps + 1 END,
                 freeNum = CASE WHEN stamps + 1 > 6 THEN freeNum + 1 ELSE freeNum END,
-                lastVisit = ?
-                WHERE name = ?`,[date, name], (err) =>
+                lastVisit = "${date}"
+                WHERE id = ${id}`, (err) =>
         {
             if(err)
             {
@@ -224,7 +224,7 @@ ipcMain.handle('create-alert', (e, message) =>
 {
     createAlert(message);
 })
-ipcMain.handle("redeem-coffee", async (e, name:string) =>
+ipcMain.handle("redeem-coffee", async (e, id: number) =>
 {
     const date: string = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
                                 .toISOString()
@@ -236,8 +236,8 @@ ipcMain.handle("redeem-coffee", async (e, name:string) =>
     {
         db.run(`UPDATE customers SET 
                 freeNum = CASE WHEN freeNum - 1 < 0 THEN 0 ELSE freeNum - 1 END,
-                lastVisit = ?
-                WHERE name = ?`, [date, name], (err) =>
+                lastVisit = "${date}"
+                WHERE id = ${id}`, (err) =>
         {
             if(err)
             {
@@ -250,11 +250,11 @@ ipcMain.handle("redeem-coffee", async (e, name:string) =>
         })
     })
 })
-ipcMain.handle("remove-customer", async (e, name:string) =>
+ipcMain.handle("remove-customer", async (e, id: number) =>
 {
     return new Promise((res, rej) =>
     {
-        db.run(`DELETE FROM customers WHERE name = "${name}"`, err =>
+        db.run(`DELETE FROM customers WHERE id = "${id}"`, err =>
         {
             if(err)
             {
@@ -267,6 +267,29 @@ ipcMain.handle("remove-customer", async (e, name:string) =>
         })
     })
 })
+ipcMain.handle("edit-customer", async (e, id: number, name:string, stamps: number, freeNum: number) =>
+{
+    return new Promise((res, rej) =>
+    {
+        db.run(`UPDATE customers SET
+                name = ?,
+                stamps = ?,
+                freeNum = ?
+                WHERE id = ?`,
+                [name, stamps, freeNum, id],
+                err =>
+                {
+                    if(err)
+                    {
+                        rej(err);
+                    }
+                    else
+                    {
+                        res({msg: "Successfully updated customer"})
+                    }
+                })
+    })
+})
 
 // End of Handles
 
@@ -276,7 +299,12 @@ app.on('ready', async () =>
     {
         db.serialize( () =>
         {
-            db.run("CREATE TABLE IF NOT EXISTS customers (name VARCHAR(50) PRIMARY KEY, stamps INTEGER, freeNum INTEGER, dateAdded DATE, lastVisit DATE)");
+            db.run(`CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                                                          name VARCHAR(50) NOT NULL, 
+                                                          stamps INTEGER, 
+                                                          freeNum INTEGER, 
+                                                          dateAdded DATE, 
+                                                          lastVisit DATE)`);
         })
         createWindow();
 

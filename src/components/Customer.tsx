@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styles from "./customer.module.css"
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 interface CustomerInfo
 {
+    id: number,
     name: string;
     stamps: number;
     freeNum: number;
@@ -13,33 +14,55 @@ interface CustomerInfo
 export default function Customer() 
 {
     const stampHolderRef = useRef<HTMLDivElement>(null);
-    const modalInputRef = useRef<HTMLInputElement>(null);
-    const customerName: string = window.location.href.split('/')[window.location.href.split('/').length - 1].replace("%20", " ");
+    const deleteModalInputRef = useRef<HTMLInputElement>(null);
+    const customerID = parseInt(window.location.href.split("/")[window.location.href.split("/").length - 1]);
     
     const [info, setInfo] = useState<CustomerInfo | null>(null);
-    const [showModal, setShowModal] = useState(false);
-    const [modalInput, setModalInput] = useState("");
+    const [editFreeNum, setEditFreeNum] = useState<number>(0); 
+    const [editStamps, setEditStamps] = useState<number>(0);
+    const [editName, setEditName] = useState<string>("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [deleteModalInput, setDeleteModalInput] = useState("");
 
     useEffect(() =>
     {
-        if(!showModal)
+        if(!showDeleteModal)
         {
             setTimeout(() =>
             {
-                setModalInput("");
+                setDeleteModalInput("");
             },350)
         }
         else
         {
-            modalInputRef.current.focus();
+            deleteModalInputRef.current.focus();
         }
-    },[showModal])
+    },[showDeleteModal])
 
+    useEffect(() =>
+    {
+        if(!showEditModal)
+        {
+            if(info)
+            {
+                setTimeout(() => 
+                {
+                    setEditName(info.name);
+                    setEditStamps(info.stamps);
+                    info.freeNum <= 20 ?
+                    setEditFreeNum(info.freeNum)
+                    :
+                    setEditFreeNum(0);
+                }, 350);
+            }
+        }
+    }, [showEditModal])
     const getInfo = async () =>
     {
         try
         {
-            setInfo(await (window as any).electron.getCustomer(customerName))
+            setInfo(await (window as any).electron.getCustomer(customerID));
         }
         catch(err)
         {
@@ -60,7 +83,7 @@ export default function Customer()
         {   
             
 
-            await (window as any).electron.addStamp(customerName);
+            await (window as any).electron.addStamp(customerID);
 
             if(stamps === 6)
             {
@@ -148,7 +171,7 @@ export default function Customer()
     {
         try 
         {
-            await (window as any).electron.redeemCoffee(customerName);
+            await (window as any).electron.redeemCoffee(customerID);
             if(info.freeNum === 0)    
             {
                 (window as any).electron.createAlert(new Error("Not enough Stamps"))
@@ -161,13 +184,34 @@ export default function Customer()
         }
     }
 
+    const editCustomer = async (e: FormEvent<HTMLFormElement>) =>
+    {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        console.log(formData)
+        const editData: CustomerInfo = 
+        {
+            id: customerID,
+            name: formData.get("name") as string,
+            stamps: parseInt(formData.get('stamps') as string),
+            freeNum: parseInt(formData.get("freeNum") as string),
+            lastVisit: info.lastVisit,
+            dateAdded: info.dateAdded
+        }
+        
+        await (window as any).electron.editCustomer(info.id, editData.name, editData.stamps, editData.freeNum);
+        getInfo()
+        setInfo(editData);
+        setShowEditModal(false);
+    }
+
     const deleteCustomer = async () =>
     {
-        if(modalInput.toLowerCase() == customerName.toLowerCase())
+        if(deleteModalInput.toLowerCase() == info.name.toLowerCase())
         {
             try 
             {
-                await (window as any).electron.removeCustomer(customerName);    
+                await (window as any).electron.removeCustomer(customerID);    
                 navigate("/");
             } 
             catch (err) 
@@ -184,26 +228,42 @@ export default function Customer()
     {
         getInfo();
     }, [])
+    useEffect(() =>
+    {
+        if(info)
+        {
+            setEditName(info.name)
+            setEditStamps(info.stamps)
+
+            info.freeNum <= 20 ?
+            setEditFreeNum(info.freeNum)
+            :
+            setEditFreeNum(0);
+        }
+    }, [info])
     const navigate = useNavigate();
     return(
         <div id={styles.outerWrapper}>
-            <button id={styles.backButton} onClick={() => navigate("/")}>
-                Back
-            </button>
-
+            <div id={styles.outerButtonWrap}>
+                <button onClick={() => navigate("/")}>
+                    Back
+                </button>
+                <button onClick={() => {setShowEditModal(true)}}>
+                    Edit
+                </button>
+            </div>
             <div id={styles.customer}>
-                <h1>
-                    {customerName}
-                </h1>
                 <main id={styles.mainWrap}>
                     {info ? 
                         (
                             <>
+                                <h1>
+                                    {info.name}
+                                </h1>
                                 <div id={styles.infoWrap}>
                                     <div>
                                         <h4>Current Stamps</h4>
                                         <div id={styles.stampHolder} ref={stampHolderRef} onClick={() => addStamp(info.stamps)}>
-                                            
                                             {
                                                 (
                                                     () =>
@@ -213,11 +273,11 @@ export default function Customer()
                                                         {
                                                             if(i < info.stamps)
                                                             {
-                                                                stamps.push(<div className={styles.stamped}></div>)
+                                                                stamps.push(<div key={i} className={styles.stamped}></div>)
                                                             }
                                                             else
                                                             {
-                                                                stamps.push(<div></div>)
+                                                                stamps.push(<div key={i}></div>)
                                                             }
                                                             
                                                         }
@@ -250,31 +310,22 @@ export default function Customer()
                                         Date Last Visited: {info.lastVisit}
                                     </div>
                                 </div>
-                                <button id={styles.deleteButton} onClick={() => setShowModal(true)}>Remove Customer</button>
-                            </>
-                        ) 
-                        : 
-                        (
-                            <div>Loading...</div>
-                        )
+                                <button id={styles.deleteButton} onClick={() => setShowDeleteModal(true)}>Remove Customer</button>
+
+
+                                <div 
+                    id={styles.deleteModal} 
+                    className={showDeleteModal ? styles.active : ""} 
+
+                    onClick={(e) => 
+                    {
+                        if((e.target as HTMLElement).id === styles.deleteModal)
+                        {
+                            setShowDeleteModal(false)
+                        }
                     }
-                </main>
-                
-                <>
-                    {showModal && (
+                }>
 
-                        <div 
-                            id={styles.modal} 
-                            className={showModal ? styles.active : ""} 
-
-                            onClick={(e) => 
-                            {
-                                if((e.target as HTMLElement).id === styles.modal)
-                                {
-                                    setShowModal(false)
-                                }
-                            }
-                        }>
                             <main>
                                     <div>
                                         <h2>
@@ -285,22 +336,65 @@ export default function Customer()
                                         </p>
                                     </div>
                                     <form onSubmit={deleteCustomer}>
-                                        <input type="text" required={true} value={modalInput} maxLength={50} onChange={e => setModalInput(e.target.value)} placeholder="Customer Name" ref={modalInputRef}/>                
+                                        <input type="text" required={true} value={deleteModalInput} maxLength={50} onChange={e => setDeleteModalInput(e.target.value)} placeholder="Customer Name" ref={deleteModalInputRef}/>                
                                         <div id={styles.modalButtonWrap}>
                                             <button type="submit">
                                                 Confirm
                                             </button>
-                                            <button type="button" onClick={() => setShowModal(false)}>
+                                            <button type="button" onClick={() => setShowDeleteModal(false)}>
                                                 Cancel
                                             </button>
                                         </div>
                                     </form>
                                 
                             </main>
-                        </div>
-                    )}
-                </>
+                </div>
+               
+                    <div 
+                        id={styles.editModal}
+                        className={showEditModal ? styles.active : ""}
+
+                        onClick={(e) =>
+                        {
+                            if((e.target as HTMLElement).id === styles.editModal)
+                            {
+                                setShowEditModal(false);
+                            }
+                        }}
+                    >
+                        <main>
+                            <button id={styles.editCancelButton} onClick={() => setShowEditModal(false)}>&#x2715;</button>
+                            <form onSubmit={editCustomer}>
+                                <div>
+                                    <label>Change Name</label>
+                                    <input name="name" type="text" placeholder="Customer Name" value={editName} onChange={e => setEditName(e.target.value)}/>
+                                </div>
+                                <div>
+                                    <label>Change Stamps</label>
+                                    <input type="range" max={6} min={0} name="stamps" value={editStamps} onChange={e => setEditStamps(parseInt(e.target.value))}/>
+                                    <label>{editStamps}</label>
+                                </div>
+                                <div>
+                                    <label>Change Free Coffees</label>
+                                    <input type="range" max={20} min={0} name="freeNum" value={editFreeNum} onChange={e => setEditFreeNum(parseInt(e.target.value))} />
+                                    <label>{editFreeNum}</label>
+                                </div>
+                                <button type="submit">Confirm Edit</button>
+                            </form>
+                        </main>
+
+                    </div>
+                            </>
+                        ) 
+                        : 
+                        (
+                            <div>Loading...</div>
+                        )
+                    }
+                </main>
+                
+                
+                </div>
             </div>
-        </div>
     )
 }

@@ -2,6 +2,7 @@ import styles from "./customercard.module.css";
 
 interface CustomerInfo
 {
+    id: number;
     name: string;
     stamps: number;
     freeNum: number;

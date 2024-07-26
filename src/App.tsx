@@ -28,7 +28,7 @@ const App = () =>
             <Header setQuery={setQuery}/>
             <Routes>
                 <Route path='/' element={<Home query={query}/>}/>
-                <Route path='/customer/:name' element={<Customer/>}/>
+                <Route path='/customer/:id' element={<Customer/>}/>
             </Routes>
         </HashRouter>
     );

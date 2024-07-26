@@ -21,7 +21,12 @@
     height: 75vh;
     min-height: 550px;
 }
-#backButton
+#outerButtonWrap
+{
+    display: flex;
+    justify-content: space-between;
+}
+#outerButtonWrap > button
 {
 
     background-color: rgb(139, 23, 28);
@@ -42,13 +47,13 @@
                 border-color ease 250ms;
 }
 
-#backButton:hover
+#outerButtonWrap > button:hover
 {
     background-color:rgb(221, 221, 221);
     border-color: rgb(230,230,230);
     color: black;
 }
-#backButton:active
+#outerButtonWrap > button:active
 {
     scale: 0.95;
 }
@@ -71,7 +76,7 @@
     user-select: none;
 }
 
-#customer > h1
+#customer > main > h1
 {
     width: 100%;
     margin: 0;
@@ -231,6 +236,7 @@
 }
 #deleteButton
 {
+    cursor: pointer;
     font-family: "Inter";
     font-size: 22px;
     font-weight: 200;
@@ -244,7 +250,8 @@
     background-color: rgb(139, 23, 28);
     color: white;
 }
-#modal
+
+#deleteModal, #editModal
 {
     display: flex;
     align-items: center;
@@ -258,11 +265,14 @@
     background-color: rgba(0,0,0,0.5);
     padding: 10px;
     opacity: 0;
-    visibility: visible;
+    visibility: hidden;
     white-space: nowrap;
-    transition: opacity 350ms ease-in-out, width ease 0ms 350ms, height ease 0ms 350ms, left 0ms 350ms;
+    transition: opacity 350ms ease-in-out, width ease 0ms 350ms, height ease 0ms 350ms, left 0ms 350ms, visibility 0ms 350ms;
+
+    font-family: "Inter";
 }
-#modal.active 
+
+#deleteModal.active, #editModal.active
 {
     height: 100vh;
     width: 100vw;
@@ -272,38 +282,150 @@
 
     transition: opacity 350ms ease-in-out;
 
-}
-#modal > main 
+} 
+#deleteModal > main, #editModal > main 
 {
-    background-color: white;
     padding: 20px;
     border-radius: 10px;
     flex-direction: column;
+    background-color: white;
     gap: 50px;
     transition: all ease 250ms;
 }
-#modal > main > form
+#editModal > main
+{
+    display: flex;
+    width: 400px;
+    padding: 40px;
+    gap: 0px;
+}
+#editModal > main > #editCancelButton
+{
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgb(216, 216, 216);  
+    background-color: rgb(226, 226, 226);
+    border-radius: 4px;
+    font-size: 20px;
+    align-self: flex-end;
+    transition: all ease-in-out 250ms;
+}
+#editModal > main > #editCancelButton:hover
+{
+    background-color: rgb(139, 23, 28);
+    color: white;
+    border-color: rgb(167, 31, 37);
+}
+#editModal > main > #editCancelButton:active
+{
+    scale: 0.9;
+}
+
+#editModal > main > h1
+{
+    margin: 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+#editModal > main > form > div 
 {
     display: flex;
     flex-direction: column;
+    width: 100%;
+}
+#editModal > main > form > div > label
+{
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    font-family: "Inter";
+    padding: 10px;
+}
+#editModal > main > form > div:first-child > label:first-child
+{
+    margin-bottom: 10px;
+}
+#editModal > main > form > div:not(:first-child) > label:first-child
+{
+    border-bottom: 1px solid rgb(139, 23, 28);
+}
+#editModal > main > form > button
+{
+    margin-top: 20px;
+    height: 50px !important;
+    width: 100% !important;
+}
+#editModal > main > form > div > input[type=text]
+{
+    margin: 0;
+    background-color: rgb(228, 228, 228);
+    border-radius: 3px;
+    border: 3px solid rgb(218, 218, 218);
+    text-align: center;
+    height: 40px;
+    font-size: 18px;
+    transition: all ease 250ms;
+    margin-bottom: 20px;
+    font-family: "Inter";
+}
+#editModal > main > form > div > input[type=text]::placeholder
+{
+    opacity: 1;
+    transition: opacity ease-in-out 250ms;
+}
+#editModal > main > form > div > input[type=text]:focus-visible::placeholder
+{
+    opacity: 0;
 }
 
-#modal #modalButtonWrap
+#editModal > main > form > div > input:focus-visible
+{
+    outline: 0;
+    border: 3px solid gray;
+}
+input[type=range] 
+{
+  appearance: none;
+}
+input[type=range]::-webkit-slider-thumb 
+{
+  appearance: none;
+  background: white;
+  height: 16px;
+  width: 15px; 
+  border-radius: 20px;
+  margin-top: 0px;
+
+}
+
+input[type=range]::-webkit-slider-runnable-track 
+{
+    width: 300px;
+    height: 20px;
+    background: rgb(139, 23, 28);
+    padding: 2px;
+    margin: 0;
+    border-radius: 10px;
+    
+}
+
+
+
+#deleteModal #modalButtonWrap
 {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-#modalButtonWrap > button
+#modalButtonWrap > button, #editModal > main > form > button
 {
     width: 33%;
     height: 35px;
 
     border-radius: 5px;
     border: 1px solid rgb(202, 202, 202);
-    font-family: "Source Sans";
     font-size: 18px;
-
+    font-family: "Inter";
     transition: all ease 250ms;
 }
 
@@ -314,17 +436,17 @@
 }
     
 
-#modal > main > div > p
+#deleteModal > main > div > p
 {
     text-align: center;
     font-size: 18px;
 }
-#modal > main > div > p, h2
+#deleteModal > main > div > p, h2
 {
     padding: 10px;
     margin: 0;
 }
-#modal > main > form > input
+#deleteModal > main > form > input
 {
     width: 100%;
     height: 50px;
@@ -338,17 +460,17 @@
     transition: all ease-in-out 250ms;
 }
 
-#modal > main > form > input:focus-visible
+#deleteModal > main > form > input:focus-visible
 {
     outline: 3px solid gray;
     transition: all ease 250ms;
 }
-#modal > main > form > input::placeholder
+#deleteModal > main > form > input::placeholder
 {
     opacity: 1;
     transition: opacity ease 250ms;
 }
-#modal > main > form > input:focus-visible::placeholder
+#deleteModal > main > form > input:focus-visible::placeholder
 {
     opacity: 0;
 }
